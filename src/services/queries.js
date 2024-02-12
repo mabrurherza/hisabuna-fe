@@ -1,8 +1,8 @@
-import useSWR from "swr";
+// import useSWR from "swr";
 
-export function fetchJournals() {
-    return useSWR("/journals")
-}
+// export function fetchJournals() {
+//     return useSWR("/journals")
+// }
 
 
-// https://jsonplaceholder.typicode.com/todos/1
+// // https://jsonplaceholder.typicode.com/todos/1

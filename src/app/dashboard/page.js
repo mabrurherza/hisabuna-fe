@@ -107,7 +107,7 @@ const journals = [
 ]
 
 
-export default async function MainDashboard() {
+export default function MainDashboard() {
     // const [dummyData, setDummyData] = useState(null);
 
     // useEffect(() => {

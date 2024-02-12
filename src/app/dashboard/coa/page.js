@@ -3,7 +3,7 @@ import { useState } from "react"
 import ItemCOA from "../components/ItemCOA"
 import FilterBtn from "../components/FilterBtn"
 
-export default async function MainDashboard() {
+export default function MainDashboard() {
 
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">

@@ -42,13 +42,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex-1">
-            <div className="relative w-full h-[600px] rounded-xl overflow-hidden shadow-lg">
-              <Image
-                src={"/images/hero-placeholder.webp"}
-                fill={true}
-                objectFit="cover"
-                objectPosition="top-left"
-              />
+            <div className="relative w-full rounded-xl overflow-hidden shadow-lg">
+              <img src="/images/mockup-hisabuna-v01.png" alt="Hisabuna mockup" />
+
             </div>
 
           </div>
