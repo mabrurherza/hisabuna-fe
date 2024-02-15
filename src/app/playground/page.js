@@ -1,30 +1,40 @@
 'use client'
 
-import useSWR from "swr"
-import IconCoa from "../components/icons/IconCOA"
-// const fetcher = (url) => fetch(url).then(res => res.json())
-const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-import { fetchJournals } from "../../services/queries"
-
-
+import useSWR from "swr";
 
 export default function Playground() {
+    const fetcher = async () => {
+        const response = await fetch('https://hisabunapi.lokaldown.com/api/jurnal');
+        const data = await response.json();
+        return data;
+    }
 
-    const { data, error, isLoading } = useSWR("https://localhost:4000/journals", fetcher)
+    const { data, error } = useSWR('jurnals', fetcher, {
+        fallbackData: [],
+    });
 
-    if (error) return <div>failed</div>
-    if (isLoading) return <div>loading....</div>
+    // Destructure data directly
+    const { data: dataArray } = data || {};
 
-    const QueryJournals = fetchJournals()
+    // Check if dataArray is undefined
+    if (!dataArray) {
+        console.log("Data is undefined");
+        return <div>Loading...</div>;
+    }
 
-    console.log(QueryJournals.data)
+    console.log(dataArray);
 
+    if (error) return <div>Failed to load</div>;
 
     return (
         <div>
-            <div>tes</div>
+            {dataArray.map((i, index) => (
+                <div key={index}>
+                    <p>{i.voucher}</p>
+                    <p>{i.trans_no}</p>
+                    <p>{i.keterangan}</p>
+                </div>
+            ))}
         </div>
-    )
-
+    );
 }

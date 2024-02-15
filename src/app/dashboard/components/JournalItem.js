@@ -2,7 +2,7 @@
 
 import BtnSecondary from "../../components/BtnSecondary"
 
-export default function JournalItem({ noUrut = 123, created = "12/03/24", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan" }) {
+export default function JournalItem({ index, noUrut = 123, created = "2024-02-14 06:25:25", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan" }) {
     function journalType() {
         switch (type) {
             default:
@@ -14,16 +14,33 @@ export default function JournalItem({ noUrut = 123, created = "12/03/24", type =
         }
     }
 
+    function convertDateFormat(inputDate) {
+        // Create a Date object from the input string
+        const dateObj = new Date(inputDate);
+
+        // Extract day, month, and year components
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+        const year = dateObj.getFullYear();
+
+        // Construct the desired date format
+        const formattedDate = `${day}/${month}/${year}`;
+
+        return formattedDate;
+    }
+
+    const dateCreated = convertDateFormat(created)
+
 
     return (
         <div className="h-fit border-b border-b-zinc-300 px-4 py-3 flex items-center">
             <div className="flex w-full">
                 <div className="flex w-1/4 justify-between items-center">
                     <div className="flex-1">
-                        <p>{noUrut}</p>
+                        <p>{index}</p>
                     </div>
                     <div className="flex-1">
-                        <p>{created}</p>
+                        <p>{dateCreated}</p>
                     </div>
                     <div className="flex-1 grid place-items-center text-center">
                         <p className={`uppercase rounded px-2 text-sm font-bold tracking-wider  ${journalType()}`}>{type}</p>

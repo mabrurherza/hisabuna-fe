@@ -4,13 +4,7 @@ import Image from "next/image"
 import JournalItem from "./components/JournalItem"
 import FilterBtn from "./components/FilterBtn"
 import Link from "next/link"
-// import dummyJournals from "../_data/dummyJournals"
-
-// async function getJournals() {
-//     const res = await fetch("http://localhost:4000/journals")
-
-//     return res.json()
-// }
+import useSWR from "swr"
 
 const journals = [
     {
@@ -107,33 +101,79 @@ const journals = [
 ]
 
 
+
 export default function MainDashboard() {
-    // const [dummyData, setDummyData] = useState(null);
+    const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch('/data/dummyJournals.json');
-    //             const data = await response.json();
-    //             setDummyData(data);
-    //         } catch (error) {
-    //             console.error('Error fetching dummy data:', error);
-    //         }
-    //     };
+    const fetcher = async () => {
+        const response = await fetch('https://hisabunapi.lokaldown.com/api/jurnal')
+        const data = await response.json()
+        return data
+    }
 
-    //     fetchData();
-    // }, []);
+    const { data, error, isLoading } = useSWR('jurnals', fetcher);
+    const { data: dataArray } = data || {};
 
-    // const journals = await getJournals()
+    // State to store dataArray
+    const [dataJournals, setDataJournals] = useState([])
+
+    useEffect(() => {
+        // Update the state when dataArray changes
+        if (dataArray) {
+            setDataJournals(dataArray);
+            console.log(dataArray)
+        }
+    }, [dataArray]);
+
+
+    if (!dataArray) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) return <div>Failed to load</div>;
+
+
+    const handleFilterClick = (filter) => {
+        if (filter === 'Semua') {
+            setSelectedFilters(['Semua']);
+        } else {
+            setSelectedFilters((prevFilters) => {
+                if (prevFilters.includes('Semua')) {
+                    return [filter];
+                }
+
+                const updatedFilters = prevFilters.includes(filter)
+                    ? prevFilters.filter((f) => f !== filter)
+                    : [...prevFilters, filter];
+
+                if (updatedFilters.length === 0) {
+                    return ['Semua'];
+                }
+
+                return updatedFilters;
+            });
+        }
+    };
+
+    const filteredData = selectedFilters.includes('Semua')
+        ? dataJournals
+        : dataJournals.filter((item) => selectedFilters.includes(item.voucher));
 
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
             <div className="flex justify-between items-center p-4 border-b border-zinc-200">
                 <div className="flex gap-1 items-center text-sm p-1 rounded border border-zinc-300">
-                    <FilterBtn start={true} name="Semua Jurnal" />
-                    <FilterBtn start={false} name="JV (Jurnal Umum)" />
-                    <FilterBtn start={false} name="RV (Jurnal Masuk)" />
-                    <FilterBtn start={false} name="PV (Jurnal Keluar)" />
+
+                    {['Semua', 'JV', 'RV', 'PV'].map((filter) => (
+                        <button
+                            key={filter}
+                            onClick={() => handleFilterClick(filter)}
+                            className={`py-1 px-2  cursor-pointer rounded-sm ${selectedFilters.includes(filter) ? 'text-white bg-emerald-500' : 'bg-white'}`}
+                        >
+                            {filter}
+                        </button>
+                    ))}
+
 
                 </div>
                 <Link href="/dashboard/tambah">
@@ -177,9 +217,10 @@ export default function MainDashboard() {
             </div>
 
             <div className="h-full flex-col flex overflow-y-auto bg-white pb-20">
-                {journals ? (
-                    journals.map((item) => (
-                        <JournalItem key={item.noUrut} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
+                {filteredData ? (
+                    filteredData.map((item, index) => (
+                        // <JournalItem key={index} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
+                        <JournalItem key={item.id} index={index} noUrut={item.trans_no} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.noJurnal} name={item.keterangan} />
                     ))
                 ) : (
                     <div className="w-full h-full grid place-items-center">
