@@ -1,5 +1,5 @@
 'use client'
-import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 import Link from 'next/link'
 
@@ -20,7 +20,8 @@ function MenuButton() {
 }
 
 export default function Sidebar() {
-    const router = useRouter();
+    const pathname = usePathname()
+    console.log(pathname)
 
     return (
         <div id="sidebar" className="w-[320px] border-r border-r-zinc-200 h-screen">
@@ -37,13 +38,13 @@ export default function Sidebar() {
 
 
             <div className="px-4 py-5 border-b border-b-zinc-200">
-                <MenuItem menuName="Dashboard Jurnal" icon="ic-home" link="/dashboard" />
+                <MenuItem menuName="Dashboard Jurnal" icon="ic-home" link="/dashboard" pathName={pathname} />
             </div>
 
             <div className="px-4 py-8 flex flex-col border-b border-b-zinc-200">
-                <p className="text-sm font-medium text-zinc-400 tracking-widest">KONFIGURASI</p>
-                <MenuItem icon="ic-coa-config" menuName="Chart of Account" link="/dashboard/coa" />
-                <MenuItem icon="ic-saldo-awal" menuName="Saldo Awal" link="/dashboard" />
+                <p className="text-sm font-medium text-zinc-400 tracking-widest mb-2">KONFIGURASI</p>
+                <MenuItem icon="ic-coa-config" menuName="Chart of Account" link="/dashboard/coa" pathName={pathname} />
+                <MenuItem icon="ic-saldo-awal" menuName="Saldo Awal" link="" pathName={pathname} />
             </div>
 
             <div className="px-4 py-8 flex flex-col">

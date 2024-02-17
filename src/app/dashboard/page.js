@@ -5,104 +5,15 @@ import JournalItem from "./components/JournalItem"
 import FilterBtn from "./components/FilterBtn"
 import Link from "next/link"
 import useSWR from "swr"
-
-const journals = [
-    {
-        "noUrut": 0,
-        "dateCreated": "14/02/24",
-        "type": "JV",
-        "noJurnal": 18,
-        "name": "Dummy journals"
-    },
-    {
-        "noUrut": 1,
-        "dateCreated": "14/02/24",
-        "type": "JV",
-        "noJurnal": 1,
-        "name": "Penyesuaian Persediaan"
-    },
-    {
-        "noUrut": 2,
-        "dateCreated": "14/02/24",
-        "type": "PV",
-        "noJurnal": 2,
-        "name": "Pembayaran Utang Dagang"
-    },
-    {
-        "noUrut": 3,
-        "dateCreated": "14/02/24",
-        "type": "RV",
-        "noJurnal": 3,
-        "name": "Penerimaan Penjualan Tunai"
-    },
-    {
-        "noUrut": 4,
-        "dateCreated": "14/02/24",
-        "type": "JV",
-        "noJurnal": 4,
-        "name": "Pembebanan Biaya Operasional"
-    },
-    {
-        "noUrut": 5,
-        "dateCreated": "14/02/24",
-        "type": "PV",
-        "noJurnal": 5,
-        "name": "Pembayaran Gaji Karyawan"
-    },
-    {
-        "noUrut": 6,
-        "dateCreated": "14/02/24",
-        "type": "RV",
-        "noJurnal": 6,
-        "name": "Penerimaan Pendapatan Sewa"
-    },
-    {
-        "noUrut": 7,
-        "dateCreated": "14/02/24",
-        "type": "JV",
-        "noJurnal": 7,
-        "name": "Penyusutan Aset Tetap"
-    },
-    {
-        "noUrut": 8,
-        "dateCreated": "14/02/24",
-        "type": "PV",
-        "noJurnal": 8,
-        "name": "Pembayaran Tagihan Listrik"
-    },
-    {
-        "noUrut": 9,
-        "dateCreated": "14/02/24",
-        "type": "RV",
-        "noJurnal": 9,
-        "name": "Penerimaan Pembayaran Piutang"
-    },
-    {
-        "noUrut": 10,
-        "dateCreated": "14/02/24",
-        "type": "JV",
-        "noJurnal": 10,
-        "name": "Penghapusan Piutang Tak Tertagih"
-    },
-    {
-        "noUrut": 11,
-        "dateCreated": "14/02/24",
-        "type": "PV",
-        "noJurnal": 132,
-        "name": "Pembayaran jasa desain"
-    },
-    {
-        "noUrut": 12,
-        "dateCreated": "13/02/24",
-        "type": "JV",
-        "noJurnal": 189,
-        "name": "Another payment"
-    }
-]
+import LoadingDots from "./components/LoadingDots"
+import IconSearch from "../components/icons/IconSearch"
+import ErrorAlert from "./components/ErrorStatus"
 
 
 
 export default function MainDashboard() {
+
+
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
 
     const fetcher = async () => {
@@ -126,11 +37,11 @@ export default function MainDashboard() {
     }, [dataArray]);
 
 
-    if (!dataArray) {
-        return <div>Loading...</div>;
-    }
+    // if (!dataArray) {
+    //     return <div>Loading...</div>;
+    // }
 
-    if (error) return <div>Failed to load</div>;
+    // if (error) return <div>Failed to load</div>;
 
 
     const handleFilterClick = (filter) => {
@@ -162,19 +73,25 @@ export default function MainDashboard() {
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
             <div className="flex justify-between items-center p-4 border-b border-zinc-200">
-                <div className="flex gap-1 items-center text-sm p-1 rounded border border-zinc-300">
+                <div className="flex gap-3">
+                    <div className="flex gap-1 items-center text-sm p-1 rounded border border-zinc-300">
+                        {['Semua', 'JV', 'RV', 'PV'].map((filter) => (
+                            <button
+                                key={filter}
+                                onClick={() => handleFilterClick(filter)}
+                                className={`py-1 px-2  cursor-pointer rounded-sm ${selectedFilters.includes(filter) ? 'text-white bg-emerald-500' : 'bg-white'}`}
+                            >
+                                {filter}
+                            </button>
+                        ))}
 
-                    {['Semua', 'JV', 'RV', 'PV'].map((filter) => (
-                        <button
-                            key={filter}
-                            onClick={() => handleFilterClick(filter)}
-                            className={`py-1 px-2  cursor-pointer rounded-sm ${selectedFilters.includes(filter) ? 'text-white bg-emerald-500' : 'bg-white'}`}
-                        >
-                            {filter}
-                        </button>
-                    ))}
 
+                    </div>
 
+                    <div id="SearchBar" className="relative text-sm rounded border border-zinc-300 flex items-center w-[400px]">
+                        <input className="h-full w-full p-2 rounded" type="text" placeholder="Cari jurnal atau entri" />
+                        <IconSearch />
+                    </div>
                 </div>
                 <Link href="/dashboard/tambah">
                     <button className="stylizedBtn text-base font-medium tracking-normal px-4 py-2 border border-emerald-500 bg-emerald-500 hover:bg-emerald-800 hover:border-emerald-800 rounded-lg text-white flex gap-2 flex-row">
@@ -217,7 +134,7 @@ export default function MainDashboard() {
             </div>
 
             <div className="h-full flex-col flex overflow-y-auto bg-white pb-20">
-                {filteredData ? (
+                {/* {filteredData ? (
                     filteredData.map((item, index) => (
                         // <JournalItem key={index} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
                         <JournalItem key={item.id} index={index} noUrut={item.trans_no} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.noJurnal} name={item.keterangan} />
@@ -226,7 +143,16 @@ export default function MainDashboard() {
                     <div className="w-full h-full grid place-items-center">
                         <img src="/images/loading-placeholder.png" alt="loading" width={120} />
                     </div>
-                )}
+                )} */}
+
+                {error ? <ErrorAlert /> : isLoading ? <LoadingDots /> :
+                    filteredData.map((item, index) => (
+                        // <JournalItem key={index} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
+                        <JournalItem key={item.id} index={index} noUrut={item.trans_no} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.noJurnal} name={item.keterangan} />
+                    ))
+                }
+
+
 
 
             </div>

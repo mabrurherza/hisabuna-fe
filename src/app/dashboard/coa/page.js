@@ -1,9 +1,37 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ItemCOA from "../components/ItemCOA"
 import FilterBtn from "../components/FilterBtn"
+import useSWR from "swr"
+import LoadingDots from "../components/LoadingDots"
+import IconSearch from "@/app/components/icons/IconSearch"
+import ErrorAlert from "../components/ErrorStatus"
 
 export default function MainDashboard() {
+    const fetcher = async () => {
+        const response = await fetch('https://hisabunapi.lokaldown.com/api/coa')
+        const data = await response.json()
+        return data
+    }
+
+    const { data, error, isLoading } = useSWR('coas', fetcher);
+    const { data: dataArray } = data || {};
+
+    const [dataCOA, setDataCOA] = useState([])
+
+    useEffect(() => {
+        // Update the state when dataArray changes
+        if (dataArray) {
+            setDataCOA(dataArray);
+            console.log(dataArray)
+        }
+    }, [dataArray]);
+
+
+
+
+
+
 
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
@@ -25,6 +53,10 @@ export default function MainDashboard() {
                         <FilterBtn start={false} name="3" />
                         <FilterBtn start={false} name="4" />
                         <FilterBtn start={false} name="5" />
+                    </div>
+                    <div id="SearchBar" className="relative text-sm rounded border border-zinc-300 flex items-center w-[280px]">
+                        <input className="h-full w-full p-2 rounded" type="text" placeholder="Cari akun" />
+                        <IconSearch />
                     </div>
                 </div>
                 <button className=" text-base tracking-normal px-4 py-2 border border-emerald-500 hover:bg-emerald-100 rounded-lg flex gap-2 flex-row">
@@ -66,7 +98,8 @@ export default function MainDashboard() {
             </div>
 
             <div className="h-full flex-col flex overflow-y-auto bg-white pb-20">
-                <ItemCOA />
+                {error ? <ErrorAlert /> : isLoading ? <LoadingDots /> : dataCOA.map((i) => <ItemCOA key={i.id} namaAkun={i.akun_nama} noAkun={i.akun_no} />)}
+
             </div>
         </main>
     )
