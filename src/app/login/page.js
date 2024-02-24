@@ -4,10 +4,39 @@ import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
 import { Alert } from "@/components/ui/alert"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
+import axios from "axios"
 
 export default function LoginPage() {
-    const [isAccountInvalid, setAccountInvalid] = useState(false)
+
+    const router = useRouter()
+    const [isAccountInvalid, setAccountInvalid] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSignIn = async () => {
+        await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        }).then(response => {
+            console.log(response);
+        })
+
+        axios.post("http://localhost:8000/api/login", {
+            email: email,
+            password: password
+        }, {
+            withCredentials: true
+        }).then(response => {
+            console.log(response);
+            if (response.status === 200) {
+                router.push("/dashboard");
+            }
+        }).catch(error => {
+            console.log(error);
+            setAccountInvalid(true);
+        })
+    };
+
     return (
         <main className="flex h-screen w-full">
             <div className="flex-1 bg-emerald-500 flex items-center justify-center">
@@ -25,19 +54,18 @@ export default function LoginPage() {
                     </div>
                 </div>
                 <div className="h-16 flex items-center w-full px-5 py-2 max-w-md">
-                    {isAccountInvalid ? <div className="flex gap-2 border border-red-400 bg-red-100 p-2 rounded w-full">
-                        <div className="border border-red-400 rounded-full size-5 text-xs text-red-400 font-bold grid place-items-center">!</div>
-                        <p className="text-sm text-red-400">Email atau password salah.</p>
-                    </div> : ``}
-
+                    {isAccountInvalid && (
+                        <div className="flex gap-2 border border-red-400 bg-red-100 p-2 rounded w-full">
+                            <div className="border border-red-400 rounded-full size-5 text-xs text-red-400 font-bold grid place-items-center">!</div>
+                            <p className="text-sm text-red-400">Email atau password salah.</p>
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col p-5 gap-5 w-full max-w-md">
-                    <Input type="email" placeholder="Email" />
-                    <Input type="password" placeholder="Password" />
+                    <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-                    <Link href={"/dashboard"}>
-                        <Button size="lg" className="w-full">Sign in</Button>
-                    </Link>
+                    <Button size="lg" className="w-full" onClick={handleSignIn}>Sign in</Button>
                     <Button variant="link"> Lupa password</Button>
                 </div>
 
