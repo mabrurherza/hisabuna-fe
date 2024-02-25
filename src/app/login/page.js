@@ -13,8 +13,6 @@ import { useRouter } from 'next/navigation'
 import axios from "axios"
 import { env } from "process"
 
-axios.defaults.withCredentials = true;
-
 export default function LoginPage() {
 
     // const url = process.env.REACT_APP_URLDEV;
