@@ -32,7 +32,7 @@ export default function LoginPage() {
             console.log(response);
         })
 
-        await axios.post(`https://hisabunac.lokaldown.com/api/login`, credentials, {
+        await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
             email: email,
             password: password
         },{
