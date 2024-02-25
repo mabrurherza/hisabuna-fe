@@ -26,13 +26,21 @@ export default function LoginPage() {
 
     const handleSignIn = async () => {
         await axios.get(`https://hisabuna.lokaldown.com/public/sanctum/csrf-cookie`, {
+        },{
+            withCredentials: true
         }).then(response => {
             console.log(response);
         })
 
-        axios.post(`https://hisabuna.lokaldown.com/public/api/login`, {
+        await axios.post(`https://hisabuna.lokaldown.com/public/api/login`, credentials, {
             email: email,
             password: password
+        },{
+            withCredentials: true,
+            headers: {
+                Accept: "application/json",
+                "X-XSRF-TOKEN": getCookie("XSRF-TOKEN")
+            }
         }).then(response => {
             console.log(response);
             if (response.status === 200) {
