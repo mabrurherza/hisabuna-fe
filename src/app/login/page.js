@@ -36,11 +36,7 @@ export default function LoginPage() {
             email: email,
             password: password
         },{
-            withCredentials: true,
-            headers: {
-                Accept: "application/json",
-                "X-XSRF-TOKEN": getCookie("XSRF-TOKEN")
-            }
+            withCredentials: true
         }).then(response => {
             console.log(response);
             if (response.status === 200) {
