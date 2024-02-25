@@ -1,4 +1,8 @@
 'use client'
+
+// use config .env
+// require('dotenv').config()
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
@@ -7,8 +11,13 @@ import { Alert } from "@/components/ui/alert"
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/navigation'
 import axios from "axios"
+import { env } from "process"
+
+axios.defaults.withCredentials = true;
 
 export default function LoginPage() {
+
+    // const url = process.env.REACT_APP_URLDEV;
 
     const router = useRouter()
     const [isAccountInvalid, setAccountInvalid] = useState(false);
@@ -16,16 +25,14 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
 
     const handleSignIn = async () => {
-        await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        await axios.get(`https://hisabuna.lokaldown.com/sanctum/csrf-cookie`, {
         }).then(response => {
             console.log(response);
         })
 
-        axios.post("http://localhost:8000/api/login", {
+        axios.post(`https://hisabuna.lokaldown.com/api/login`, {
             email: email,
             password: password
-        }, {
-            withCredentials: true
         }).then(response => {
             console.log(response);
             if (response.status === 200) {
