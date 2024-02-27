@@ -17,7 +17,7 @@ export default function MainDashboard() {
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
 
     const fetcher = async () => {
-        const response = await fetch('https://hisabunapi.lokaldown.com/api/jurnal')
+        const response = await fetch('https://hisabunac.lokaldown.com/api/jurnal')
         const data = await response.json()
         return data
     }
