@@ -22,13 +22,19 @@ export default function LoginPage() {
 
     axios.defaults.withCredentials = true;
 
+    let csrfToken = "";
+
     const handleSignIn = async () => {
+        let csrfToken; // Declare a variable to store the CSRF token
+
         await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
-            withCredentials: true, // Add this line
+            withCredentials: true,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Add this line
+                'X-Requested-With': 'XMLHttpRequest',
             }
         }).then(response => {
+            // get cookie from response
+            csrfToken = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
             console.log(response);
         }).catch(error => {
             console.log(error);
@@ -38,9 +44,10 @@ export default function LoginPage() {
             email: email,
             password: password
         }, {
-            withCredentials: true, // Add this line
+            withCredentials: true,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Add this line
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken, // Add this line
             }
         }).then(response => {
             console.log(response);
