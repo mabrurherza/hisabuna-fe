@@ -33,8 +33,10 @@ export default function LoginPage() {
                 'X-Requested-With': 'XMLHttpRequest',
             }
         }).then(response => {
-            // get cookie from response
-            csrfToken = response.headers['set-cookie'][0].split(';')[0].split('=')[1];
+            const cookies = response.headers['set-cookie'];
+            csrfToken = cookies.find(cookie => cookie.includes('XSRF-TOKEN'))
+                            .split(';')[0]  // Ambil bagian token
+                            .split('=')[1]; // Pisahkan token dari nama kunci
             console.log(response);
         }).catch(error => {
             console.log(error);
