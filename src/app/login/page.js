@@ -14,13 +14,12 @@ import axios from "axios"
 import { env } from "process"
 
 export default function LoginPage() {
-
-    // const url = process.env.REACT_APP_URLDEV;
-
     const router = useRouter()
     const [isAccountInvalid, setAccountInvalid] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    axios.defaults.withCredentials = true;
 
     const handleSignIn = async () => {
         try {
@@ -28,8 +27,6 @@ export default function LoginPage() {
             const response = await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
                 email: email,
                 password: password
-            }, {
-                withCredentials: true
             });
     
             console.log(response);
