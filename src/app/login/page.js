@@ -25,41 +25,48 @@ export default function LoginPage() {
     let csrfToken = "";
 
     const handleSignIn = async () => {
-        let csrfToken; // Declare a variable to store the CSRF token
+        let csrfToken = ""; // Declare a variable to store the CSRF token
 
-        await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
-            withCredentials: true,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        }).then(response => {
+        try {
+            // Lakukan permintaan untuk mendapatkan cookie CSRF
+            const response = await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
+                withCredentials: true,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+
+            // Dapatkan token CSRF dari cookie yang diterima
             const cookies = response.headers['set-cookie'];
             csrfToken = cookies.find(cookie => cookie.includes('XSRF-TOKEN'))
                             .split(';')[0]  // Ambil bagian token
                             .split('=')[1]; // Pisahkan token dari nama kunci
             console.log(response);
-        }).catch(error => {
+        } catch (error) {
             console.log(error);
-        })
+        }
 
-        await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
-            email: email,
-            password: password
-        }, {
-            withCredentials: true,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': csrfToken, // Add this line
-            }
-        }).then(response => {
+        try {
+            // Lakukan permintaan login dengan menyertakan token CSRF
+            const response = await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
+                email: email,
+                password: password
+            }, {
+                withCredentials: true,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken, // Tambahkan baris ini
+                }
+            });
+
             console.log(response);
             if (response.status === 200) {
                 router.push("/dashboard");
             }
-        }).catch(error => {
+        } catch (error) {
             console.log(error);
             setAccountInvalid(true);
-        })
+        }
     };
 
     return (
