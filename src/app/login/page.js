@@ -25,7 +25,7 @@ export default function LoginPage() {
     const handleSignIn = async () => {
         await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
         }).then(async() => {
-            axios.post('/api/login', {
+            axios.post('https://hisabunac.lokaldown.com/api/login', {
                 email: email,
                 password: password
             }, {
