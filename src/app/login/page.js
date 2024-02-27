@@ -23,26 +23,26 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
 
     const handleSignIn = async () => {
-        await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
-        }).then(response => {
+        try {
+            await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {});
+            const response = await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
+                email: email,
+                password: password
+            }, {
+                withCredentials: true
+            });
+    
             console.log(response);
-        })
-
-        await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
-            email: email,
-            password: password
-        },{
-            withCredentials: true
-        }).then(response => {
-            console.log(response);
+            
             if (response.status === 200) {
                 router.push("/dashboard");
             }
-        }).catch(error => {
+        } catch (error) {
             console.log(error);
             setAccountInvalid(true);
-        })
+        }
     };
+    
 
     return (
         <main className="flex h-screen w-full">
