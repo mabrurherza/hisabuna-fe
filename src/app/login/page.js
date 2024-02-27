@@ -32,7 +32,7 @@ export default function LoginPage() {
                 withCredentials: true
             }).then(response => {
                 if (response.status === 200) {
-                    router.push("/dashboard");
+                    // router.push("/dashboard");
                 }
             }).catch(error => {
                 console.log(error);
