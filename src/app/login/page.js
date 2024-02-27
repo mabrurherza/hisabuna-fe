@@ -30,7 +30,16 @@ export default function LoginPage() {
                 password: password
             }, {
                 withCredentials: true
+            }).then(response => {
+                if (response.status === 200) {
+                    router.push("/dashboard");
+                }
+            }).catch(error => {
+                console.log(error);
+                setAccountInvalid(true);
             })
+        }).catch(error => {
+            console.log(error);
         })
 
         // await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
