@@ -22,40 +22,23 @@ export default function LoginPage() {
     axios.defaults.withCredentials = true;
 
     const handleSignIn = async () => {
-        let xsrfToken; // Declare a variable to store the XSRF token
-
-        await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
-            withCredentials: true,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        }).then(response => {
-            // Get the XSRF token from the cookie
-            const cookie = document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='));
-            xsrfToken = cookie.split('=')[1];
+        try {
+            await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {});
+            const response = await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
+                email: email,
+                password: password
+            });
+    
             console.log(response);
-        }).catch(error => {
-            console.log(error);
-        })
-
-        await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
-            email: email,
-            password: password
-        }, {
-            withCredentials: true,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-XSRF-TOKEN': xsrfToken, // Add this line
-            }
-        }).then(response => {
-            console.log(response);
+            
             if (response.status === 200) {
                 router.push("/dashboard");
             }
-        }).catch(error => {
+            
+        } catch (error) {
             console.log(error);
             setAccountInvalid(true);
-        })
+        }
     };
     
 
