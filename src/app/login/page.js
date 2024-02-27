@@ -15,8 +15,6 @@ import { env } from "process"
 
 export default function LoginPage() {
 
-    // const url = process.env.REACT_APP_URLDEV;
-
     const router = useRouter()
     const [isAccountInvalid, setAccountInvalid] = useState(false);
     const [email, setEmail] = useState("");
@@ -26,6 +24,10 @@ export default function LoginPage() {
 
     const handleSignIn = async () => {
         await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
+            withCredentials: true, // Add this line
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Add this line
+            }
         }).then(response => {
             console.log(response);
         }).catch(error => {
@@ -35,6 +37,11 @@ export default function LoginPage() {
         await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
             email: email,
             password: password
+        }, {
+            withCredentials: true, // Add this line
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Add this line
+            }
         }).then(response => {
             console.log(response);
             if (response.status === 200) {
