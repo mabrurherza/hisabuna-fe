@@ -24,39 +24,26 @@ export default function LoginPage() {
 
     const handleSignIn = async () => {
         await axios.get(`https://hisabunac.lokaldown.com/sanctum/csrf-cookie`, {
-        }).then(async() => {
-            axios.post('https://hisabunac.lokaldown.com/api/login', {
-                email: email,
-                password: password
-            }, {
-                withCredentials: true
-            }).then(response => {
-                console.log(response);
-                if (response.status === 200) {
-                    // router.push("/dashboard");
-                }
-            }).catch(error => {
-                console.log(error);
-                setAccountInvalid(true);
-            })
+        }).then(response => {
+            console.log(response);
         }).catch(error => {
             console.log(error);
         })
 
-        // await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
-        //     email: email,
-        //     password: password
-        // },{
-        //     withCredentials: true
-        // }).then(response => {
-        //     console.log(response);
-        //     if (response.status === 200) {
-        //         router.push("/dashboard");
-        //     }
-        // }).catch(error => {
-        //     console.log(error);
-        //     setAccountInvalid(true);
-        // })
+        await axios.post(`https://hisabunac.lokaldown.com/api/login`, {
+            email: email,
+            password: password
+        },{
+            withCredentials: true
+        }).then(response => {
+            console.log(response);
+            if (response.status === 200) {
+                router.push("/dashboard");
+            }
+        }).catch(error => {
+            console.log(error);
+            setAccountInvalid(true);
+        })
     };
 
     return (
