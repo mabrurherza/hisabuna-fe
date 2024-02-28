@@ -28,12 +28,8 @@ export default function LoginPage() {
                 email: email,
                 password: password
             });
-    
-            console.log(response);
-            
-            if (response.status === 200) {
-                router.push("/dashboard");
-            }
+
+            router.push("/dashboard");
             
         } catch (error) {
             console.log(error);
