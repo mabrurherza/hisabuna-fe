@@ -1,4 +1,6 @@
 'use client'
+
+
 import { useState, useEffect } from "react"
 import ItemCOA from "../components/ItemCOA"
 import FilterBtn from "../components/FilterBtn"
@@ -6,13 +8,29 @@ import useSWR from "swr"
 import LoadingDots from "../components/LoadingDots"
 import IconSearch from "@/app/components/icons/IconSearch"
 import ErrorAlert from "../components/ErrorStatus"
+import axios from "axios"
 
 export default function MainDashboard() {
+
+    const token = localStorage.getItem('authToken');
+
     const fetcher = async () => {
-        const response = await fetch('https://hisabunapi.lokaldown.com/api/coa')
-        const data = await response.json()
-        return data
+        try {
+            const response = await axios.get(process.env.NEXT_PUBLIC_URLDEV + '/api/coa', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data)
+    
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        }
     }
+
 
     const { data, error, isLoading } = useSWR('coas', fetcher);
     const { data: dataArray } = data || {};

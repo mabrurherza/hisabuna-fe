@@ -3,33 +3,43 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import JournalItem from "./components/JournalItem"
 import FilterBtn from "./components/FilterBtn"
+import axios from "axios"
 import Link from "next/link"
 import useSWR from "swr"
 import LoadingDots from "./components/LoadingDots"
 import IconSearch from "../components/icons/IconSearch"
 import ErrorAlert from "./components/ErrorStatus"
 
-
+axios.defaults.withCredentials = true;
 
 export default function MainDashboard() {
 
 
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
+    const token = localStorage.getItem('authToken');
 
     const fetcher = async () => {
-        const response = await fetch('https://hisabunac.lokaldown.com/api/jurnal')
-        const data = await response.json()
-        return data
+        try {
+            const response = await axios.get(process.env.NEXT_PUBLIC_URLDEV + '/api/jurnal', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        }
     }
+
 
     const { data, error, isLoading } = useSWR('jurnals', fetcher);
     const { data: dataArray } = data || {};
 
-    // State to store dataArray
     const [dataJournals, setDataJournals] = useState([])
 
     useEffect(() => {
-        // Update the state when dataArray changes
         if (dataArray) {
             setDataJournals(dataArray);
             console.log(dataArray)
