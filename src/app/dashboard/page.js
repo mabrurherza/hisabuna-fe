@@ -1,4 +1,6 @@
 'use client'
+
+
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import JournalItem from "./components/JournalItem"
@@ -16,6 +18,7 @@ export default function MainDashboard() {
 
 
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
+    const [searchQuery, setSearchQuery] = useState("");
     const token = localStorage.getItem('authToken');
 
     const fetcher = async () => {
@@ -76,9 +79,19 @@ export default function MainDashboard() {
         }
     };
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
     const filteredData = selectedFilters.includes('Semua')
         ? dataJournals
         : dataJournals.filter((item) => selectedFilters.includes(item.voucher));
+
+    const searchedData = searchQuery
+        ? filteredData.filter((item) =>
+            item.keterangan.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : filteredData;
 
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
@@ -99,7 +112,13 @@ export default function MainDashboard() {
                     </div>
 
                     <div id="SearchBar" className="relative text-sm rounded border border-zinc-300 flex items-center w-[400px]">
-                        <input className="h-full w-full p-2 rounded" type="text" placeholder="Cari jurnal atau entri" />
+                        <input
+                            className="h-full w-full p-2 rounded"
+                            type="text"
+                            placeholder="Cari jurnal atau entri"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
                         <IconSearch />
                     </div>
                 </div>
@@ -144,27 +163,11 @@ export default function MainDashboard() {
             </div>
 
             <div className="h-full flex-col flex overflow-y-auto bg-white pb-20">
-                {/* {filteredData ? (
-                    filteredData.map((item, index) => (
-                        // <JournalItem key={index} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
-                        <JournalItem key={item.id} index={index} noUrut={item.trans_no} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.noJurnal} name={item.keterangan} />
-                    ))
-                ) : (
-                    <div className="w-full h-full grid place-items-center">
-                        <img src="/images/loading-placeholder.png" alt="loading" width={120} />
-                    </div>
-                )} */}
-
                 {error ? <ErrorAlert /> : isLoading ? <LoadingDots /> :
-                    filteredData.map((item, index) => (
-                        // <JournalItem key={index} noUrut={item.noUrut} created={item.dateCreated} type={item.type} noJurnal={item.noJurnal} name={item.name} />
-                        <JournalItem key={item.id} index={index} noUrut={item.trans_no} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.noJurnal} name={item.keterangan} />
+                    searchedData.map((item, index) => (
+                        <JournalItem key={item.id} index={index} noUrut={`${item.voucher} - ${item.trans_no}`} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.trans_no} name={item.keterangan} />
                     ))
                 }
-
-
-
-
             </div>
         </main>
     )

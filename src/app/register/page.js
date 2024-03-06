@@ -25,7 +25,7 @@ export default function RegisterPage() {
     useEffect(() => {
         const checkKey = async () => {
             try {
-                const response = await axios.get(process.env.NEXT_PUBLIC_URLDEV + "/api/check");
+                const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/api/check");
                 setSerial(response.data.status);
                 console.log(response.data.status)
                 setIsLoading(false);
@@ -49,14 +49,14 @@ export default function RegisterPage() {
             let response;
 
             if(isSerialKey){
-                response = await axios.post(process.env.NEXT_PUBLIC_URLDEV + "/api/register", {
+                response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/register", {
                     name: name,
                     email: email,
                     password: password,
                     confirm_password: confirm_password
                 });
             }else{
-                response = await axios.post(process.env.NEXT_PUBLIC_URLDEV + "/api/register", {
+                response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/register", {
                     name: name,
                     email: email,
                     password: password,
