@@ -23,7 +23,7 @@ export default function MainDashboard() {
 
     const fetcher = async () => {
         try {
-            const response = await axios.get(process.env.NEXT_PUBLIC_URLDEV + '/api/jurnal', {
+            const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + '/api/jurnal', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

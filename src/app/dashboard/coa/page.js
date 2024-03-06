@@ -16,7 +16,7 @@ export default function MainDashboard() {
 
     const fetcher = async () => {
         try {
-            const response = await axios.get(process.env.NEXT_PUBLIC_URLDEV + '/api/coa', {
+            const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + '/api/coa', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
