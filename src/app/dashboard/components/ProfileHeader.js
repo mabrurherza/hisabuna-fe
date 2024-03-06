@@ -18,7 +18,7 @@ export default function ProfileHeader() {
 
 
     const handleLogout = async () => {
-        const response = await axios.post(process.env.NEXT_PUBLIC_URLDEV + "/api/logout",{}, {
+        const response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/logout",{}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 Cookies: `authToken=${encodeURIComponent(modifiedValue)}`
