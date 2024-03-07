@@ -8,6 +8,7 @@ import FilterBtn from "./components/FilterBtn"
 import axios from "axios"
 import Link from "next/link"
 import useSWR from "swr"
+import { useRouter } from 'next/navigation'
 import LoadingDots from "./components/LoadingDots"
 import IconSearch from "../components/icons/IconSearch"
 import ErrorAlert from "./components/ErrorStatus"
@@ -15,6 +16,8 @@ import ErrorAlert from "./components/ErrorStatus"
 axios.defaults.withCredentials = true;
 
 export default function MainDashboard() {
+
+    const router = useRouter()
 
 
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);

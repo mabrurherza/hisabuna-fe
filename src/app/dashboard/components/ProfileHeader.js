@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
@@ -8,13 +8,24 @@ import { useRouter } from 'next/navigation'
 export default function ProfileHeader() {
     const router = useRouter()
     const [showDropdown, setShowDropdown] = useState(false);
-
+    
+    let originalValue;
+    let modifiedValue;
+    
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
     }
 
-    const originalValue = localStorage.getItem('authToken');
-    const modifiedValue = originalValue.replace(/\|/g, '%7C');
+    useEffect(() => {
+        if(!localStorage.getItem('authToken')){
+            alert("Anda harus login untuk mengakses halaman ini.");
+            router.push('/login');
+        }else{
+            let originalValue = localStorage.getItem('authToken');
+            let modifiedValue = originalValue.replace(/\|/g, '%7C');
+        }
+    })
+
 
 
     const handleLogout = async () => {
