@@ -23,6 +23,10 @@ export default function RegisterPage() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
+        if(localStorage.getItem('authToken')){
+            router.push('/dashboard');
+        }
+
         const checkKey = async () => {
             try {
                 const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/api/check");

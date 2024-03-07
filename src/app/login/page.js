@@ -20,6 +20,12 @@ export default function LoginPage() {
 
     axios.defaults.withCredentials = true;
 
+    useEffect(() => {
+        if(localStorage.getItem('authToken')){
+            router.push('/dashboard');
+        }
+    })
+
     const handleSignIn = async () => {
         try {
             await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/sanctum/csrf-cookie", {});
