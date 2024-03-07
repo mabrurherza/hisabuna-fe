@@ -3,10 +3,21 @@
 import useSWR from "swr";
 
 export default function Playground() {
+    const token = localStorage.getItem('authToken');
+    
     const fetcher = async () => {
-        const response = await fetch('https://hisabunapi.lokaldown.com/api/jurnal');
-        const data = await response.json();
-        return data;
+        try {
+            const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + '/api/jurnal', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        }
     }
 
     const { data, error } = useSWR('jurnals', fetcher, {
