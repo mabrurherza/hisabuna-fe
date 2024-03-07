@@ -16,13 +16,18 @@ import ErrorAlert from "./components/ErrorStatus"
 axios.defaults.withCredentials = true;
 
 export default function MainDashboard() {
-
     const router = useRouter()
 
 
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
     const [searchQuery, setSearchQuery] = useState("");
-    const token = localStorage.getItem('authToken');
+    const [token, setToken] = useState("")
+
+    useEffect(() => {
+        let value
+        value = localStorage.getItem('authToken') || ""
+        setToken(value)
+      }, [])
 
     const fetcher = async () => {
         try {

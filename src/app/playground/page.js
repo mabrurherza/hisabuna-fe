@@ -1,9 +1,16 @@
 'use client'
 
 import useSWR from "swr";
+import { useState, useEffect } from "react";
 
 export default function Playground() {
-    const token = localStorage.getItem('authToken');
+    const [token, setToken] = useState("")
+
+    useEffect(() => {
+        let value
+        value = localStorage.getItem('authToken') || ""
+        setToken(value)
+      }, [])
     
     const fetcher = async () => {
         try {
