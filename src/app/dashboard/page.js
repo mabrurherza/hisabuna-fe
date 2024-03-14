@@ -16,12 +16,9 @@ import ErrorAlert from "./components/ErrorStatus"
 axios.defaults.withCredentials = true;
 
 export default function MainDashboard() {
-    const router = useRouter()
-
-
     const [selectedFilters, setSelectedFilters] = useState(["Semua"]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [token, setToken] = useState("")
+    const [token, setToken] = useState("");
 
     useEffect(() => {
         let value
@@ -47,7 +44,6 @@ export default function MainDashboard() {
 
     const { data, error, isLoading } = useSWR('jurnals', fetcher);
     const { data: dataArray } = data || {};
-
     const [dataJournals, setDataJournals] = useState([])
 
     useEffect(() => {
@@ -56,14 +52,6 @@ export default function MainDashboard() {
             console.log(dataArray)
         }
     }, [dataArray]);
-
-
-    // if (!dataArray) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // if (error) return <div>Failed to load</div>;
-
 
     const handleFilterClick = (filter) => {
         if (filter === 'Semua') {
@@ -101,6 +89,15 @@ export default function MainDashboard() {
         )
         : filteredData;
 
+    const countByVoucher = searchedData.reduce((x, y) => {
+        if (!x[y.voucher]) {
+            x[y.voucher] = 0;
+        }
+        x[y.voucher]++;
+        x['Semua']++;
+        return x;
+    }, { Semua: 0 });
+
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
             <div className="flex justify-between items-center p-4 border-b border-zinc-200">
@@ -130,7 +127,7 @@ export default function MainDashboard() {
                         <IconSearch />
                     </div>
                 </div>
-                <Link href="/dashboard/tambah">
+                <Link href={{pathname: '/dashboard/tambah', query: countByVoucher}}>
                     <button className="stylizedBtn text-base font-medium tracking-normal px-4 py-2 border border-emerald-500 bg-emerald-500 hover:bg-emerald-800 hover:border-emerald-800 rounded-lg text-white flex gap-2 flex-row">
                         <div className="plusicon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="white"><path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v120H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440h120Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" /></svg>
