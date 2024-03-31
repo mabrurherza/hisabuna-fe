@@ -59,7 +59,7 @@ function ModalCOA({ closeCOA, dataCOA, selectData }) {
   );
 }
 
-export default function editJurnal() {
+export default function EditJurnal() {
   const params = useParams();
   const router = useRouter()
   const [token] = useState(localStorage.getItem('authToken'));

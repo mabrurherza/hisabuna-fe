@@ -19,7 +19,7 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
             });
             setFormData(initialFormData);
         }
-    }, []);
+    }, [data, listInput]);
     
     useEffect(() => {
         console.log(formData);
