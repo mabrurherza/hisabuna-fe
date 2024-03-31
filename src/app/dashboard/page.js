@@ -76,7 +76,7 @@ export default function MainDashboard() {
 
     
     const handleDownloadJurnal = () => {
-        fetch(process.env.NEXT_PUBLIC_URLPROD + '/api/report/jurnal', {
+        fetch(process.env.NEXT_PUBLIC_URLPROD + '/api/report/daftar-jurnal', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
