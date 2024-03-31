@@ -70,7 +70,7 @@ export default function EditJurnal() {
         if(datas){
             setData(datas)
         }
-  })
+  },[datas])
 
   const [isOpenCOA, setIsOpenCOA] = useState(false)
   const [tableData, setTableData] = useState([]);

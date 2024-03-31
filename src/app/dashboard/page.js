@@ -181,7 +181,7 @@ export default function MainDashboard() {
             {error ? <ErrorAlert /> : isLoading ? <LoadingDots /> :
                 dataJournals && searchedData && searchedData.length > 0 ? (
                     searchedData.map((item, index) => (
-                        <JournalItem id={item.id} index={index} noUrut={`${item.voucher} - ${item.trans_no}`} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.trans_no} name={item.keterangan} selectData={selectAkun} />
+                        <JournalItem key={item.id} id={item.id} index={index} noUrut={`${item.voucher} - ${item.trans_no}`} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.trans_no} name={item.keterangan} selectData={selectAkun} />
                     ))
                 ) : (
                     <div>No data available</div>

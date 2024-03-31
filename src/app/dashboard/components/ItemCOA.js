@@ -20,6 +20,7 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
             setFormData(initialFormData);
         }
     }, [data, listInput]);
+    const listInputMemoized = useMemo(() => listInput, [listInput]);
     
     useEffect(() => {
         console.log(formData);
@@ -176,7 +177,6 @@ export default function ItemCOA({ dataCOA ,token ,noAkun = 9, golongan = "Aset",
         })
         .catch(error => {
             console.error('Error:', error.message);
-            ReactDOM.render(<ErrorAlert errorName={error.message} />, document.getElementById('error-alert'));
         });
     };
 

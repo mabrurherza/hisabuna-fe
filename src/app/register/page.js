@@ -42,7 +42,7 @@ export default function RegisterPage() {
         };
 
         checkKey();
-    }, []);
+    }, [router]);
 
     function getCookie(name) {
         const cookieString = document.cookie;
