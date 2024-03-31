@@ -4,35 +4,28 @@ import { useEffect, useState } from 'react';
 import Image from "next/image";
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
+import { useFetchData } from "./../../../services/fetcher"
 
 export default function ProfileHeader() {
     const router = useRouter()
     const [showDropdown, setShowDropdown] = useState(false);
-    
-    let originalValue;
-    let modifiedValue;
+    const [token, setToken] = useState('');
     
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
     }
 
     useEffect(() => {
-        if(!localStorage.getItem('authToken')){
-            alert("Anda harus login untuk mengakses halaman ini.");
-            router.push('/login');
-        }else{
-            let originalValue = localStorage.getItem('authToken');
-            let modifiedValue = originalValue.replace(/\|/g, '%7C');
-        }
-    })
+        const value = localStorage.getItem('authToken') || "";
+        setToken(value);
+    }, []);
 
-
+    const { data, count, error, isLoading } = useFetchData(token, 'user');
 
     const handleLogout = async () => {
         const response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/logout",{}, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-                Cookies: `authToken=${encodeURIComponent(modifiedValue)}`
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         })
         if(response.data.status == true){
@@ -44,6 +37,8 @@ export default function ProfileHeader() {
         }
     }
 
+    console.log(data)
+
     return (
         <header className="h-16 flex items-center justify-between m-4 mb-0">
             <div className="flex gap-2 items-center">
@@ -52,14 +47,15 @@ export default function ProfileHeader() {
                 </div>
                 <div>
                     <p className="text-xs">PROJECT</p>
-                    <p className="text-lg">PT Insan Kreatif Cendekia</p>
+                    <p className="text-lg">{!isLoading && data && (data.company)}</p>
                 </div>
             </div>
 
             <div className="flex gap-2 items-center relative">
                 <div>
                     <p className="text-xs uppercase text-right">Profile</p>
-                    <p className="text-base hover:underline cursor-pointer" onClick={toggleDropdown}>Muhammad Ihsan</p>
+                    <p className="text-xs uppercase text-right">{!isLoading && data && (data.email)}</p>
+                    <p className="text-base hover:underline cursor-pointer text-right" onClick={toggleDropdown}>{!isLoading && data && (data.name)}</p>
                 </div>
                 <div className="size-12 relative rounded-full overflow-hidden border-4 border-emerald-600 border-opacity-20 cursor-pointer" onClick={toggleDropdown}>
                     <Image src="/images/dummy-profile.png" alt="dummy company" fill={true} />

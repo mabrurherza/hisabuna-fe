@@ -1,8 +1,20 @@
 'use client'
 
 import BtnSecondary from "../../components/BtnSecondary"
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from "react"
 
-export default function JournalItem({ index, noUrut = 123, created = "2024-02-14 06:25:25", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan" }) {
+export default function JournalItem({ index, id, noUrut = 123, created = "2024-02-14 06:25:25", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan", selectData }) {
+    const router = useRouter()
+
+    const [token, setToken] = useState("");
+    useEffect(() => {
+        const value = localStorage.getItem('authToken') || "";
+        setToken(value);
+    }, []);
+
+
+
     function journalType() {
         switch (type) {
             default:
@@ -15,21 +27,77 @@ export default function JournalItem({ index, noUrut = 123, created = "2024-02-14
     }
 
     function convertDateFormat(inputDate) {
-        // Create a Date object from the input string
         const dateObj = new Date(inputDate);
 
-        // Extract day, month, and year components
         const day = dateObj.getDate().toString().padStart(2, '0');
-        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
         const year = dateObj.getFullYear();
 
-        // Construct the desired date format
         const formattedDate = `${day}/${month}/${year}`;
 
         return formattedDate;
     }
 
     const dateCreated = convertDateFormat(created)
+
+
+    function handleOnClick(id) {
+        router.push(`/dashboard/edit/${id}`)
+    }
+
+    const handleDownloadJurnalById = (id) => {
+        fetch(process.env.NEXT_PUBLIC_URLPROD + `/api/jurnal/report/${id}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Terjadi kesalahan saat mengunduh jurnal');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `jurnal_${id}.pdf`);
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    };
+
+    const handleDeleteJurnal = (id) => {
+        fetch(process.env.NEXT_PUBLIC_URLPROD + `/api/jurnal/delete/${id}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Terjadi kesalahan saat menghapus jurnal');
+            }
+
+            handleItemClick(id)
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+        });
+    };
+
+    const handleItemClick = (jurnalId) => {
+        selectData(jurnalId);
+    };
 
 
     return (
@@ -55,15 +123,12 @@ export default function JournalItem({ index, noUrut = 123, created = "2024-02-14
                         <p>{name}</p>
                     </div>
                     <div className="flex gap-2 w-fit">
-                        <BtnSecondary name="Edit" />
-                        <BtnSecondary name="Print" variant="outline" />
-                        <BtnSecondary name="Hapus" variant="text" textColor="text-red-500" />
-
+                        <BtnSecondary name="Edit" onClick={() => handleOnClick(id)} />
+                        <BtnSecondary name="Print" variant="outline" onClick={() => handleDownloadJurnalById(id)} />
+                        <BtnSecondary name="Hapus" onClick={() => handleDeleteJurnal(id)} variant="text" textColor="text-red-500" />
                     </div>
                 </div>
             </div>
-
-
         </div>
     )
 }

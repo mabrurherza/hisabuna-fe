@@ -1,7 +1,19 @@
+'use client'
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
+  useEffect(() => {
+    if(localStorage.getItem('authToken')){
+        router.push('/dashboard');
+    }
+  })
+
+
   return (
     <>
       <navbar className="flex bg-white border border-b-zinc-200 p-10 h-24 items-center justify-between gap-12">

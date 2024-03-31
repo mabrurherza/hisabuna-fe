@@ -19,6 +19,7 @@ export default function RegisterPage() {
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
     const [serial_key, setSerialKey] = useState("");
+    const [token, setToken] = useState({});
 
     axios.defaults.withCredentials = true;
 
@@ -30,6 +31,7 @@ export default function RegisterPage() {
         const checkKey = async () => {
             try {
                 const response = await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/api/check");
+                console.log(response.data)
                 setSerial(response.data.status);
                 console.log(response.data.status)
                 setIsLoading(false);
@@ -42,7 +44,23 @@ export default function RegisterPage() {
         checkKey();
     }, []);
 
+    function getCookie(name) {
+        const cookieString = document.cookie;
+        const cookies = cookieString.split(';');
+        
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            const [cookieName, cookieValue] = cookie.split('=');
+            if (cookieName === name) {
+                return cookieValue;
+            }
+        }
+        
+        return null;
+    }
+
     const handleSignUp = async () => {
+        const cookie = getCookie('XSRF-TOKEN')
         if(password !== confirm_password) {
             setError("Password tidak sama");
             setAccountInvalid(true);
@@ -51,7 +69,7 @@ export default function RegisterPage() {
 
         try {
             let response;
-
+            await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/sanctum/csrf-cookie", {});
             if(isSerialKey){
                 response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/register", {
                     name: name,
@@ -66,6 +84,10 @@ export default function RegisterPage() {
                     password: password,
                     confirm_password: confirm_password,
                     serial_key: serial_key
+                }, {
+                    headers: {
+                        Cook: `Bearer ${cookie}`
+                    }
                 });
             }
 

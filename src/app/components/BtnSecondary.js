@@ -1,4 +1,4 @@
-export default function BtnSecondary({ name = "Action", variant, onClick, textColor = "text-black" }) {
+export default function BtnSecondary({id = "", name = "Action", variant, onClick, textColor = "text-black" }) {
 
     const getVariantClasses = () => {
         switch (variant) {
