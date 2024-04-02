@@ -52,14 +52,14 @@ export default function Sidebar() {
             {!isLoading && data && data.name == 'superadmin' && (
                 <div className="px-4 py-8 flex flex-col border-b border-b-zinc-200">
                 <p className="text-sm font-medium text-zinc-400 tracking-widest mb-2">USER</p>
-                    <MenuItem icon="ic-users" menuName="Users" link="/users" pathName={pathname} />
+                    <MenuItem icon="ic-users" menuName="Users" link="/dashboard/users" pathName={pathname} />
                 </div>
             )}
 
             <div className="px-4 py-8 flex flex-col border-b border-b-zinc-200">
                 <p className="text-sm font-medium text-zinc-400 tracking-widest mb-2">KONFIGURASI</p>
                 <MenuItem icon="ic-coa-config" menuName="Chart of Account" link="/dashboard/coa" pathName={pathname} />
-                <MenuItem icon="ic-saldo-awal" menuName="Saldo Awal" link="" pathName={pathname} />
+                <MenuItem icon="ic-saldo-awal" menuName="Saldo Awal"pathName={pathname} link="/dashboard/saldo-awal" />
             </div>
 
             <div className="px-4 py-8 flex flex-col">

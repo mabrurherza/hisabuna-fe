@@ -97,6 +97,37 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
     );
 }
 
+export function ItemSaldoAwal({ dataCOA ,token ,noAkun = 9, golongan = "Aset", saldoNormal = "Debit", level = 123, namaAkun = "",debit,kredit, idCoa, selectData }){
+    const router = useRouter()
+    const [isOpenCOA, setIsOpenCOA] = useState(false)
+    const [akunCOA, setAkunCOA] = useState("")
+
+    
+
+
+    return (
+        <div className="h-fit border-b border-b-zinc-300 px-4 py-3 flex items-center">
+            {isOpenCOA && <ModalCOA closeCOA={closeCOA} dataCOA={dataCOA} token={token} id={akunCOA}/>}
+            <div className="flex w-full">
+                <div className=" flex w-full justify-between items-center">
+                    <div className="flex-1">
+                        <p>{noAkun}</p>
+                    </div>
+                    <div className="flex-1">
+                        <p>{namaAkun}</p>
+                    </div>
+                    <div className="flex-1">
+                        <p>{debit}</p>
+                    </div>
+                    <div className="flex-1">
+                        <p>{kredit}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default function ItemCOA({ dataCOA ,token ,noAkun = 9, golongan = "Aset", saldoNormal = "Debit", level = 123, namaAkun = "", idCoa, selectData }) {
     const router = useRouter()
