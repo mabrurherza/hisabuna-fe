@@ -4,7 +4,7 @@ import BtnSecondary from "../../components/BtnSecondary"
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from "react"
 
-export default function JournalItem({ index, id, noUrut = 123, created = "2024-02-14 06:25:25", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan", selectData }) {
+export default function JournalItem({ index, id, noUrut = 123, created = "2024-02-14 06:25:25", type = "jv", noJurnal = 345, name = "Nama jurnal/entri/pembukuan", selectData, subtotal }) {
     const router = useRouter()
 
     const [token, setToken] = useState("");
@@ -12,6 +12,8 @@ export default function JournalItem({ index, id, noUrut = 123, created = "2024-0
         const value = localStorage.getItem('authToken') || "";
         setToken(value);
     }, []);
+
+    console.log(subtotal)
 
 
 
@@ -103,7 +105,7 @@ export default function JournalItem({ index, id, noUrut = 123, created = "2024-0
     return (
         <div className="h-fit border-b border-b-zinc-300 px-4 py-3 flex items-center">
             <div className="flex w-full">
-                <div className="flex w-1/4 justify-between items-center">
+                <div className="flex w-2/3 justify-between items-center">
                     <div className="flex-1">
                         <p>{index}</p>
                     </div>
@@ -116,12 +118,15 @@ export default function JournalItem({ index, id, noUrut = 123, created = "2024-0
                     <div className="flex-1 text-center">
                         <p>{noJurnal}</p>
                     </div>
+                    <div className="flex-1 text-center">
+                        <p>{name}</p>
+                    </div>
+                    <div className="flex-1 text-center">
+                        <p>{subtotal}</p>
+                    </div>
                 </div>
 
                 <div className="flex-1 pl-5 flex justify-between items-center">
-                    <div >
-                        <p>{name}</p>
-                    </div>
                     <div className="flex gap-2 w-fit">
                         <BtnSecondary name="Edit" onClick={() => handleOnClick(id)} />
                         <BtnSecondary name="Print" variant="outline" onClick={() => handleDownloadJurnalById(id)} />

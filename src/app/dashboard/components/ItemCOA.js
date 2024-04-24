@@ -9,22 +9,22 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
     const router = useRouter()
     const listInput = ['akun_no', 'akun_nama', 'saldo_awal_debit', 'saldo_awal_credit', 'arus_kas', 'anggaran'];
     const [formData, setFormData] = useState({});
-    const data = dataCOA.filter(item => item["akun_no"] === id);
-    
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        setData(dataCOA);
+    }, [dataCOA]);
+    console.log(data)
+
     useEffect(() => {
         if (data.length > 0) {
             const initialFormData = {};
             listInput.forEach(inputName => {
-                initialFormData[inputName] = data[0][inputName];
+                initialFormData[inputName] = data[inputName];
             });
             setFormData(initialFormData);
         }
     }, [data, listInput]);
-    const listInputMemoized = useMemo(() => listInput, [listInput]);
-    
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
     
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -36,22 +36,18 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const noAkun = formData.akun_no;
-        const found = dataCOA.some(coa => coa.akun_no === noAkun);
-        if (found && noAkun !== id) {
-            alert("Data sudah ada dalam dataCOA");
-        } else {
+        if(data){
             const addForm = {
-                akun_no: formData.akun_no,
-                akun_nama: formData.akun_nama,
-                saldo_awal_debit: formData.saldo_awal_debit,
-                saldo_awal_credit: formData.saldo_awal_credit,
-                arus_kas: formData.arus_kas,
-                anggaran: formData.anggaran
+                akun_no: formData.akun_no || data.akun_no,
+                akun_nama: formData.akun_nama || data.akun_nama,
+                saldo_awal_debit: formData.saldo_awal_debit || data.saldo_awal_debit,
+                saldo_awal_credit: formData.saldo_awal_credit || data.saldo_awal_credit,
+                arus_kas: formData.arus_kas || data.arus_kas,
+                anggaran: formData.anggaran || data.anggaran
             }
 
             try {
-                const response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + `/api/coa/edit/${data[0].id}`, addForm, {
+                const response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + `/api/coa/edit/${data.id}`, addForm, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         Authorization: `Bearer ${token}`
@@ -81,7 +77,7 @@ function ModalCOA({ closeCOA, dataCOA, token, id }) {
                                 type="text"
                                 id={inputName}
                                 name={inputName}
-                                value={formData[inputName] || data[0][inputName] || ''}
+                                value={formData[inputName] || data[inputName] || ''}
                                 onChange={handleInputChange}
                                 className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             />

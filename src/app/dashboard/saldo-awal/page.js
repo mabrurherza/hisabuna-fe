@@ -101,35 +101,32 @@ export default function MainDashboard() {
     }, []);
 
     const { data, error, isLoading } = useFetchData(token, 'coa');
+
+    console.log(data)
     
 
     useEffect(() => {
         if (data && !hasFetched) {
-            const datas = data.data.filter(item => item.akun_no.includes('-'));
-            const totalSaldoDebit = datas.reduce((acc, item) => {
-                const saldoAwalDebit = parseInt(item.saldo_awal_debit);
-                if (saldoAwalDebit < 0) {
-                    return acc - Math.abs(saldoAwalDebit);
-                } else {
-                    return acc + saldoAwalDebit;
-                }
+            const filteredData = data.data.filter(item => item.akun_no.includes('-'));
+            
+            const totalDebit = filteredData.reduce((acc, item) => {
+                return acc + (parseInt(item.total_transaksi_debit) || 0);
             }, 0);
-            const totalSaldoKredit = datas.reduce((acc, item) => {
-                const saldoAwalKredit = parseInt(item.saldo_awal_credit);
-                if (saldoAwalKredit < 0) {
-                    return acc - Math.abs(saldoAwalKredit);
-                } else {
-                    return acc + saldoAwalKredit;
-                }
+    
+            const totalCredit = filteredData.reduce((acc, item) => {
+                return acc + (parseInt(item.total_transaksi_credit) || 0);
             }, 0);
-            const totalSelisih = totalSaldoDebit - totalSaldoKredit;
-            setTotalSelisih(totalSelisih)
-            setTotalDebit(totalSaldoDebit)
-            setTotalKredit(totalSaldoKredit)
-            setDataCOA(datas)
+    
+            const totalDifference = totalDebit - totalCredit;
+    
+            setTotalDebit(totalDebit);
+            setTotalKredit(totalCredit);
+            setTotalSelisih(totalDifference);
+            setDataCOA(filteredData);
             setHasFetched(true);
         }
     }, [data, hasFetched]);
+    
 
     const selectAkun = (coa) => {
         setDataCOA(dataCOA.filter(x => x.id != coa))

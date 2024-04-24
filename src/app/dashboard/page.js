@@ -14,8 +14,6 @@ import ErrorAlert from "./components/ErrorStatus"
 
 import { useFetchData } from "./../../services/fetcher"
 
-axios.defaults.withCredentials = true;
-
 export default function MainDashboard() {
     const [selectedFilters, setSelectedFilters] = useState(["semua"]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -73,6 +71,9 @@ export default function MainDashboard() {
             item.keterangan.toLowerCase().includes(searchQuery.toLowerCase())
         )
         : filteredData;
+
+
+    console.log(searchedData)
 
     
     const handleDownloadJurnal = () => {
@@ -148,7 +149,7 @@ export default function MainDashboard() {
                 </Link>
             </div>
             <div className="px-4 py-2 flex border-b border-zinc-200 text-sm bg-zinc-100">
-                <div className=" flex w-1/4 justify-between items-center">
+                <div className=" flex w-2/3 justify-between items-center">
                     <div className="flex-1">
                         <p>No. urut</p>
                     </div>
@@ -161,27 +162,25 @@ export default function MainDashboard() {
                     <div className="flex-1 text-center">
                         <p>No. jurnal</p>
                     </div>
+                    <div className="flex-1 text-center">
+                        <p>Nama Jurnal</p>
+                    </div>
+                    <div className="flex-1 text-center">
+                        <p>Total Transaksi</p>
+                    </div>
                 </div>
+
 
                 <div className="flex-1 pl-5 flex items-center">
-                    <p>Nama jurnal</p>
+                    <p>Action</p>
                 </div>
-
-                {/* <div className="flex gap-2 items-center p-2 cursor-pointer rounded hover:bg-white">
-                    <div className="flex flex-col gap-0.5 items-center">
-                        <div className="h-0.5 w-5 bg-emerald-600"></div>
-                        <div className="h-0.5 w-3 bg-emerald-600"></div>
-                        <div className="h-0.5 w-1 bg-emerald-600"></div>
-                    </div>
-                    <p className="text-sm font-medium text-emerald-600">Filter</p>
-                </div> */}
             </div>
 
             <div className="h-full flex-col flex overflow-y-auto bg-white pb-20">
             {error ? <ErrorAlert /> : isLoading ? <LoadingDots /> :
                 dataJournals && searchedData && searchedData.length > 0 ? (
                     searchedData.map((item, index) => (
-                        <JournalItem key={item.id} id={item.id} index={index} noUrut={`${item.voucher} - ${item.trans_no}`} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.trans_no} name={item.keterangan} selectData={selectAkun} />
+                        <JournalItem key={item.id} id={item.id} index={index} noUrut={`${item.voucher} - ${item.trans_no}`} created={item.jurnal_tgl} type={item.voucher} noJurnal={item.trans_no} subtotal={item.subtotal} name={item.keterangan} selectData={selectAkun} />
                     ))
                 ) : (
                     <div>No data available</div>

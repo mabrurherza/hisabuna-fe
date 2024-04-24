@@ -255,7 +255,7 @@ export default function MainDashboard() {
                     <LoadingDots />
                 ) : (
                     dataCOA.map((i) => (
-                        <ItemCOA dataCOA={dataCOA} token={token} key={i.id} idCoa={i.id} namaAkun={i.akun_nama} noAkun={i.akun_no} selectData={selectAkun} />
+                        <ItemCOA dataCOA={i} token={token} key={i.id} idCoa={i.id} namaAkun={i.akun_nama} noAkun={i.akun_no} selectData={selectAkun} />
                     ))
                 )}
             </div>

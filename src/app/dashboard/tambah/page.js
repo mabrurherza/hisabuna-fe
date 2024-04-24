@@ -466,7 +466,7 @@ export default function TambahJurnal() {
                 throw new Error('Failed to submit form');
             }
     
-            router.push('/dashboard');
+            // router.push('/dashboard');
         } catch (error) {
             console.error('Error submitting form:', error.message);
         }

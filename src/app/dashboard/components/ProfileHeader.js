@@ -9,6 +9,8 @@ import { useFetchData } from "./../../../services/fetcher"
 function ModalProfile({ closeProfile, dataProfile, token }) {
     // const listInput = ['no_akun', 'nama_akun', 'saldo_awal_debit', 'saldo_awal_credit', 'arus_kas', 'anggaran'];
     // const [formData, setFormData] = useState({});
+    const [data, setData] = useState(dataProfile)
+    console.log(data)
 
     // const handleInputChange = (event) => {
     //     const { name, value } = event.target;
