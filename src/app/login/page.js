@@ -28,10 +28,8 @@ export default function LoginPage() {
 
     const handleSignIn = async () => {
         try {
-            await axios.get("http://localhost:8000/sanctum/csrf-cookie", {});
-            console.log(email)
-            console.log(password)
-            const response = await axios.post("http://localhost:8000/api/login", {
+            await axios.get(process.env.NEXT_PUBLIC_URLPROD + "/sanctum/csrf-cookie", {});
+            const response = await axios.post(process.env.NEXT_PUBLIC_URLPROD + "/api/login", {
                 email: email,
                 password: password
             });
