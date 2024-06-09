@@ -132,6 +132,8 @@ export default function MainDashboard() {
         setDataCOA(dataCOA.filter(x => x.id != coa))
     };
 
+    console.log(dataCOA)
+
     return (
         <main id="journalContainer" className="flex flex-col flex-1 h-full bg-white rounded-xl border border-zinc-200 overflow-y-hidden">
             {isOpenCOA && <ModalCOA closeCOA={closeCOA} dataCOA={dataCOA} token={token} />}
@@ -180,7 +182,7 @@ export default function MainDashboard() {
                     <LoadingDots />
                 ) : (
                     dataCOA.map((i) => (
-                        <ItemSaldoAwal dataCOA={dataCOA} token={token} key={i.id} idCoa={i.id} namaAkun={i.akun_nama} noAkun={i.akun_no} debit={i.saldo_awal_debit} kredit={i.saldo_awal_credit} selectData={selectAkun} />
+                        <ItemSaldoAwal dataCOA={dataCOA} token={token} key={i.id} idCoa={i.id} namaAkun={i.akun_nama} noAkun={i.akun_no} debit={i.current_saldo_debit} kredit={i.current_saldo_credit} selectData={selectAkun} />
                     ))
                 )}
             </div>

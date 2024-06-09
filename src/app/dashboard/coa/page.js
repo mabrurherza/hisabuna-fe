@@ -160,6 +160,14 @@ export default function MainDashboard() {
         setIsOpenCOA(false);
     };
 
+    const importCOA = () => {
+        console.log('import');
+    };
+
+    const exportCOA = () => {
+        console.log('export');
+    }
+
     const selectAkun = (coa) => {
         setDataCOA(dataCOA.filter(x => x.id != coa))
     };
@@ -171,7 +179,7 @@ export default function MainDashboard() {
                 <p className="font-medium text-emerald-600 text-lg">Chart of Accounts</p>
             </div>
             <div className="flex justify-between items-center p-4 border-b border-zinc-200">
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                     <div className="flex gap-1 items-center text-sm border border-zinc-300 p-0.5 rounded">
                         <FilterBtn
                             start={selectedAkun === 'semua'}
@@ -192,7 +200,7 @@ export default function MainDashboard() {
                             selected={selectedAkun === 'laba-rugi'}
                         />
                     </div>
-                    <div className="flex gap-1 items-center text-sm border border-zinc-300  p-0.5 rounded">
+                    <div className="flex gap-1 items-center text-sm border border-zinc-300 p-0.5 rounded">
                         <p>Level:</p>
                         <FilterBtn start={selectedLevel === 'semua'} name="semua" onClick={() => handleAkunLevel('semua')} selected={selectedLevel === ''} />
                         <FilterBtn start={selectedLevel === '1'} name="1" onClick={() => handleAkunLevel('1')} selected={selectedLevel === '1'} />
@@ -201,18 +209,29 @@ export default function MainDashboard() {
                         <FilterBtn start={selectedLevel === '4'} name="4" onClick={() => handleAkunLevel('4')} selected={selectedLevel === '4'} />
                         <FilterBtn start={selectedLevel === '5'} name="5" onClick={() => handleAkunLevel('5')} selected={selectedLevel === '5'} />
                     </div>
-                    <div id="SearchBar" className="relative text-sm rounded border border-zinc-300 flex items-center w-[280px]">
+                    <div id="SearchBar" className="relative text-sm rounded border border-zinc-300 flex items-center w-full md:w-[280px]">
                         <input className="h-full w-full p-2 rounded" type="text" placeholder="Cari akun" onChange={(e) => cariAkun(e.target.value)} />
                         <IconSearch />
                     </div>
                     <button onClick={openCOA} className="text-base tracking-normal px-4 py-2 border border-emerald-500 hover:bg-emerald-100 rounded-lg flex gap-2 flex-row">
                         <div className="plusicon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="rgb(16 185 129)">
-                                <path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v120H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440h120Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                <path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0 28.5 11.5T440-640v120H320q-17 0 28.5 11.5T280-480q0 17 11.5 28.5T320-440h120Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                             </svg>
                         </div>
                         Tambah Akun
                     </button>
+                    <button onClick={importCOA} className="text-base tracking-normal px-4 py-1 border border-emerald-500 hover:bg-emerald-100 rounded-sm flex gap-1 flex-row">
+                        <div className="plusicon">
+                        </div>
+                        Import Coa
+                    </button>
+                    <button onClick={importCOA} className="text-base tracking-normal px-4 py-1 border border-emerald-500 hover:bg-emerald-100 rounded-sm flex gap-1 flex-row">
+                        <div className="plusicon">
+                        </div>
+                        Export Coa
+                    </button>
+                    <p className="text-base">* Jika ingin Import COA, ambil template dari export COA</p>
                 </div>
             </div>
     

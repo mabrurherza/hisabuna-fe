@@ -122,7 +122,7 @@ export default function JournalItem({ index, id, noUrut = 123, created = "2024-0
                         <p>{name}</p>
                     </div>
                     <div className="flex-1 text-center">
-                        <p>{subtotal}</p>
+                        <p>{new Intl.NumberFormat('id-ID').format(subtotal)}</p>
                     </div>
                 </div>
 

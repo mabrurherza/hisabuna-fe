@@ -65,10 +65,11 @@ export default function Sidebar() {
             <div className="px-4 py-8 flex flex-col">
                 <p className="text-sm font-medium text-zinc-400 tracking-widest">LAPORAN</p>
                 <MenuItem icon="ic-laporan" menuName="Laba Rugi" link='/dashboard/laba-rugi' pathName={pathname} />
-                <MenuItem icon="ic-laporan" menuName="Perubahan Ekuitas/Modal" />
-                <MenuItem icon="ic-laporan" menuName="Laporan Arus Kas" />
-                <MenuItem icon="ic-laporan" menuName="Neraca Saldo" />
-                <MenuItem icon="ic-laporan" menuName="Buku Besar" />
+                <MenuItem icon="ic-laporan" menuName="Buku Besar" link='/dashboard/buku-besar' pathName={pathname} />
+                <MenuItem icon="ic-laporan" readonly={true} menuName="Perubahan Ekuitas/Modal" />
+                <MenuItem icon="ic-laporan" readonly={true} menuName="Laporan Arus Kas" />
+                <MenuItem icon="ic-laporan" readonly={true} menuName="Neraca Saldo" />
+                <MenuItem icon="ic-laporan" readonly={true} menuName="Neraca" />
             </div>
 
         </div>

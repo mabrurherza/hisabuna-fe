@@ -29,15 +29,25 @@ export default function MainDashboard() {
                 })
             });
 
-            // if (!response.ok) {
-            //     throw new Error('Gagal melakukan POST request');
-            // }
+            if (!response.ok) {
+                throw new Error('Gagal mengirim data ke server');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Laporan_Laba_Rugi_${startDate}_${endDate}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
 
             setStartDate("");
             setEndDate("");
             setErrorMessage("");
         } catch (error) {
-            // setErrorMessage("Gagal melakukan POST request: " + error.message);
+            setErrorMessage("Gagal melakukan POST request: " + error.message);
         }
     };
 
